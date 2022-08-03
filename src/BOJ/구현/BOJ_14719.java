@@ -30,29 +30,30 @@ public class BOJ_14719 {
 			map[i]=Integer.parseInt(str2[i]);
 		}
 		
+		int cnt=0; //최종 빗물
 		
-		int i=0, j=0;
-		int tmp = 0; //영역안의 블록의 갯수
-		int cnt = 0;//빗물 수
-		boolean check = false;
-		
-		for(i=0; i<W; i++) {
-			for(j=i+1; j<W; j++) {
-				if(!check && map[i]==map[j]) break; //똑같으면 무시
-				if(map[i]<=map[j]) {
-					System.out.println(i+" : "+j+" : "+tmp);
-					
-					cnt +=(map[i]*(j-i-1)-tmp); //세로 * 가로 넓이 - 블록이 있어서 채워지지 않는 곳
-					i=j-1;
-					tmp=0;
-					check = false;
-					break;
-				}
-				else {
-					check=true;
-				}
-				tmp += map[j];
-			}
+		for(int i=1; i<W-1; i++) { //경계는 제외
+			int left = -1;
+			int right = -1;
+			
+			for(int j=0;j<i;j++) {
+				left = Math.max(left, map[j]);
+			} //현재 위치(map[i])에서 왼쪽 영역의 최대 높이
+			
+			for(int j=i+1;j<W;j++) {
+				right = Math.max(right, map[j]);
+			}//오른쪽
+			
+			if(left==0 || right==0 || left<=map[i] || right<=map[i]) {
+				continue; //양옆에 블록의 막힘이 없어서 빗물을 채울수 없으므로
+			}//혹은 본인이 더 높은 경우?
+			
+			//System.out.println(left+" : "+right);
+			
+			int fill = Math.min(left, right);
+			//둘 중에 최소 높이까지 빗물을 채워야 한다.
+			
+			cnt += (fill-map[i]);
 		}
 		System.out.println(cnt);
 		
