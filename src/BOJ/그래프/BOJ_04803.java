@@ -22,6 +22,7 @@ public class BOJ_04803 {
 	static StringTokenizer tokens;
 	static ArrayList<ArrayList<Integer>> graph;
 	static boolean[] visited ;
+	static boolean flag;
 	static int cnt; //트리 개수
 
 	public static void main(String[] args) throws IOException {
@@ -49,33 +50,19 @@ public class BOJ_04803 {
 				graph.get(a).add(b);
 				graph.get(b).add(a);//양방향
 			}
-					
-//			//임의의 두 정점에 대해서 경로가 유일한지 check
-//			boolean flag = true;
-//			for(int i=1; i<=N; i++) {
-//				for(int j=0; j<graph.get(i).size(); j++) { //
-//					int a = graph.get(i).get(j);
-//					if(!visited[a]) {
-//						visited[a]= true;
-//					}
-//					else { //트리가 될 수 없음 (방문했던 곳을 또 방문해서 사이클이 발생함)
-//						flag = false;
-//					}
-//				}
-//				if(graph.get(i).size()!=0) {
-//					visited[i]=true; //부모 방문 처리
-//				}
-//			}
-//			if(flag) cnt++;
-//			for(int i=1;i<N+1; i++) {
-//				if(!visited[i]) cnt++;//독립된 곳이라면
-//			}
 			
 			for(int i=1; i<=N; i++) {
-				if(dfs(i,0)) cnt++; //i에서 시작해서 탐색했을 때 사이클 없이 탐색됨
-				
-				visited = new boolean[N+1];
+				if(visited[i]) continue;
+				dfs(i,0);
+				if(flag) {
+					cnt++; //i에서 시작해서 탐색했을 때 사이클 없이 탐색됨
+				}
+				flag = true;
+				//visited = new boolean[N+1];
 			}
+			
+			//연결되어 있는 걸 하나로 처리해야 하는데 이걸 어떻게??
+			
 			
 			sb.append("Case "+tc+": ");
 			if(cnt>1) {
@@ -92,18 +79,23 @@ public class BOJ_04803 {
 		
 	}
 	
-	static boolean dfs(int index, int prev) {
+	static void dfs(int index, int prev) {
+		if(!flag) return;
 		visited[index] = true;
 		
 		for(int i=0; i<graph.get(index).size(); i++) {
 			int a = graph.get(index).get(i);
+			System.out.println(index+ " : "+ prev + " : "+ a);
 			if(!visited[a]) {
 				dfs(a, index);
 			}
 			else if(visited[a] && a!=prev) { //방문했던 곳이고 부모가 아닌걸 가리키고 있다면 -> 사이클임
-				return false;
+				//만약 a=자식을 가리키고 있었다면 dfs 특성상 자식을 먼저 탐색했기 때문에 visited[a]=false였을 것이다. /즉, visited[a]=true인 경우는 부모이거나 사이클이 발생한 경우??
+//				for(int j=0; j<graph.get(a).size(); j++) {
+//					
+//				}
+				flag = false;
 			}
 		}
-		return true;
 	}
 }
