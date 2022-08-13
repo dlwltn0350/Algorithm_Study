@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -45,10 +47,17 @@ public class BOJ_02667 {
 		
 		for(int i=0; i<N; i++) {
 			for(int j=0; j<N; j++) {
-				if(map[i][j]==1 && dfs(i,j,true)) {
+//				if(map[i][j]==1 && dfs(i,j,true)) {
+//					cnt++;
+//					list.add(houseCnt);
+//					houseCnt = 0;
+//				}
+				
+				if(map[i][j]==1 && !visited[i][j]) {
+					bfs(i,j);
 					cnt++;
 					list.add(houseCnt);
-					houseCnt = 0;
+					houseCnt=0;
 				}
 			}
 		}
@@ -103,6 +112,40 @@ public class BOJ_02667 {
 		*/
 	}
 	
+	static void bfs(int x, int y) {
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(new Node(x,y));
+		visited[x][y] = true;
+		houseCnt++;
+		
+		while(!queue.isEmpty()) {
+			
+			Node node = queue.poll();
+			
+			for(int j=0; j<deltas.length; j++) {
+				int a = node.x+deltas[j][0];
+				int b = node.y+deltas[j][1];
+				
+				if(isIn(a,b) && !visited[a][b] && map[a][b]==1) {
+					queue.offer(new Node(a,b));
+					houseCnt++;
+					visited[a][b]=true;
+				}
+			}
+			
+		}
+	}
+	
+	static class Node{
+		int x, y;
+
+		public Node(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		}
+		
+	}
 	static boolean isIn(int a, int b) {
 		return a>=0 && a<N && b>=0 && b<N;
 	}
