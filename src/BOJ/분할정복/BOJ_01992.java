@@ -31,6 +31,37 @@ public class BOJ_01992 {
 				map[i][j] = Integer.parseInt(str[j]);
 			}
 		}
+		
+		dq(0,0,N);
+		System.out.println(sb.toString());
 	}
-
+	static void dq(int x, int y, int size) {
+		if(size<1) {
+			sb.append(")");
+			return;
+		}
+		
+		int newSize = size/2;
+		boolean flag = false;
+		int temp = map[x][y];
+		for(int i=x; i<x+size; i++) {
+			for(int j=y; j<y+size; j++) {
+				if(temp != map[i][j]) {
+					flag = true;
+				}
+			}
+		}
+		
+		if(flag) {
+			sb.append("(");
+			dq(x,y,newSize);//2사분면
+			dq(x,y+newSize,newSize);//1사분면
+			dq(x+newSize,y,newSize);//3사분면
+			dq(x+newSize,y+newSize,newSize);//4사분면
+			sb.append(")");
+		}else {
+			sb.append(map[x][y]);
+		}
+		
+	}
 }
