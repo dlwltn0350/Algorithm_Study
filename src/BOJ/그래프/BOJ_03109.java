@@ -1,4 +1,4 @@
-package BOJ.그리디;
+package BOJ.그래프;
 
 import java.io.BufferedReader;
 import java.io.IOException;
