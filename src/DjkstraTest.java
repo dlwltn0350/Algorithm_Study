@@ -56,7 +56,7 @@ public class DjkstraTest{
 			for(int i=0; i<V; i++) {
 				if(!visited[i] && adjMatrix[min.no][i] !=0 &&  D[i]>D[min.no]+adjMatrix[min.no][i]) {
 					 D[i]= D[min.no]+adjMatrix[min.no][i];
-					 pq.offer(new Node(i, adjMatrix[min.no][i]));
+					 pq.offer(new Node(i, D[i]));
 				}
 			}
 		}
