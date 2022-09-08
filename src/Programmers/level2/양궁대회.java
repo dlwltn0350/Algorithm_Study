@@ -14,7 +14,9 @@ import java.util.StringTokenizer;
 @performance
 @difficulty level2
 @category #
-@note */
+@note 1.그리디 -> 점수가 큰 순서로 어피치가 가지고 있는 점수 개수보다 하나 더 많이 가져서 최대 점수를 가져가면 어떨까 -> 예외 사항이 너무 많음->X
+2. 중복조합
+ */
 public class 양궁대회 {
 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,7 +24,7 @@ public class 양궁대회 {
 	static StringTokenizer tokens;
 	static int N;
 	static int[] apeach, ryan, result;
-	static int diff = Integer.MIN_VALUE;
+	static int diff = Integer.MIN_VALUE; //최대 라이언이 얻을 수 있는 점수 (어피치보다 더 크면서)
 	
 	public static void main(String[] args) throws IOException {
 		N = Integer.parseInt(br.readLine());
@@ -70,7 +72,7 @@ public class 양궁대회 {
 			
 			if(ryanB>apeachA) {
 				int max = diff;
-				diff = Math.max(diff, ryanB-apeachA);
+				diff = Math.max(diff, ryanB-apeachA); //라이언이 가질 수 있는 최대 점수 찾기
 				
 				if(diff == (ryanB-apeachA)) { 
 					//라이언이 가장 큰 점수 차이로 우승할 수 있는 방법이 여러 가지 일 경우, 가장 낮은 점수를 더 많이 맞힌 경우를 우선순위
@@ -81,7 +83,7 @@ public class 양궁대회 {
 							if(result[minIndex]<ryan[minIndex] && ryan[minIndex]!=0) {
 								break;
 							}
-							else if(result[minIndex]>ryan[minIndex]) {
+							else if(result[minIndex]>ryan[minIndex]) {//중간에 기존 result배열이 더 낮은 점수를 많이 맞힌 경우
 								minIndex = -2;
 								break;
 							}
@@ -89,7 +91,7 @@ public class 양궁대회 {
 					}
 					
 					
-					if(minIndex!=-2) {
+					if(minIndex!=-2) { //기존 result배열이 더 좋지 않는 이상 (ryan배열에 저장된 값이 더 좋은 경우) result값 갱신
 						for(int i=0; i<11; i++) {
 							result[i] = ryan[i];
 						}
@@ -98,7 +100,7 @@ public class 양궁대회 {
 			}
 			
 			for(int i=0; i<11; i++) {
-				ryan[i] = 0;
+				ryan[i] = 0; //라이언 배열 다시 초기화
 			}
 			return;
 		}

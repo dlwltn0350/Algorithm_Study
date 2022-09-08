@@ -23,7 +23,7 @@ public class 경주로건설 {
 	static StringTokenizer tokens;
 	static int N;
 	static int[][] map;
-	static int[][] deltas = {{-1,0},{0,1},{1,0},{0,-1}};//방향 순서 직각
+	static int[][] deltas = {{-1,0},{0,1},{1,0},{0,-1}};//방향 순서 직각  // ↑ → ↓ ←
 	static int answer = Integer.MAX_VALUE;
 	
 	public static void main(String[] args) throws IOException {
@@ -60,7 +60,7 @@ public class 경주로건설 {
 				int b = node.y+deltas[i][1];
 				
 				if(isIn(a,b) && map[a][b]!=1) {
-					if(check(i+1) == node.dir || check(i-1) == node.dir) {
+					if(check(i+1) == node.dir || check(i-1) == node.dir) { //직각인지 아닌지 판별
 						//직각(코너도로) : 500 + 100 (코너비용 +직선비용)
 						if(visited[a][b][0] >= node.cost+600 || visited[a][b][0] ==0) { //작은 비용으로 갱신하기 위해
 							queue.offer(new Node(a,b,node.cost+600,i));
