@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -53,7 +54,8 @@ public class SWEA_01249 {
 	}
 	
 	static void bfs() {
-		Queue<Node> queue = new LinkedList<>();
+		PriorityQueue<Node> queue = new PriorityQueue<>();
+		//Queue<Node> queue = new LinkedList<>();
 		queue.offer(new Node(0,0,map[0][0]));
 		boolean[][] visited = new boolean[N][N];
 		
@@ -84,7 +86,7 @@ public class SWEA_01249 {
 		return a>=0 && a<N && b>=0 && b<N;
 	}
 	
-	static class Node{
+	static class Node implements Comparable<Node>{
 		int x, y, cost;
 
 		public Node(int x, int y, int cost) {
@@ -92,6 +94,12 @@ public class SWEA_01249 {
 			this.x = x;
 			this.y = y;
 			this.cost = cost;
+		}
+
+		@Override
+		public int compareTo(Node o) {
+			// TODO Auto-generated method stub
+			return cost - o.cost;
 		}
 		
 	}
