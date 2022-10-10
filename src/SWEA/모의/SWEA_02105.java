@@ -26,6 +26,8 @@ public class SWEA_02105 {
 	static int[][] map;
 	static int[][] deltas = {{1,1},{1,-1},{-1,-1},{-1,1}};
 	static int max = Integer.MIN_VALUE;
+	static boolean[][] visited;
+	static boolean[] dessert;
 	
 	public static void main(String[] args) throws IOException {
 		int T = Integer.parseInt(br.readLine());
@@ -41,44 +43,41 @@ public class SWEA_02105 {
 				}
 			}
 			
-			max = Integer.MIN_VALUE;
+			max = -1;
 			
 			for(int i=0; i<N; i++) {
 				for(int j=0; j<N; j++) {
-					bfs(i,j);
+					visited = new boolean[N][N];
+					dessert = new boolean[101];
+					visited[i][j] = true;
+					dessert[map[i][j]] = true;
+					dfs(i,j,i,j,0,1);
 				}
 			}
 
-			if(max == Integer.MIN_VALUE) sb.append("#"+tc+"-1"+"\n");
-			else sb.append("#"+tc+max+"\n");
+			if(max == Integer.MIN_VALUE) sb.append("#"+tc+" "+"-1"+"\n");
+			else sb.append("#"+tc+" "+max+"\n");
 		}
 		
 		System.out.println(sb.toString());
 	}
 	
-	static void bfs(int x, int y) {
-		Queue<Node> queue = new LinkedList<>();
-		queue.offer(new Node(x,y,0));
-		boolean[][][] visited = new boolean[N][N][N*N];
-		visited[x][y][0] = true;
+	static void dfs(int x, int y, int initX, int initY, int prev, int cnt) {
 		
-		while(!queue.isEmpty()) {
-			Node node = queue.poll();
-			
-			if(node.cost !=0 && node.x == x && node.y ==y) {
-				max = Math.max(max, node.cost);
-				System.out.println(node.cost);
-				continue;
+		for(int i=prev; i<deltas.length; i++) {
+			int a = x + deltas[i][0];
+			int b = y + deltas[i][1];
+			if(initX == a && initY == b && cnt>=3) {
+				max = Math.max(max, cnt);
+				return;
 			}
 			
-			for(int k=0; k<deltas.length; k++) {
-				int a = node.x + deltas[k][0];
-				int b = node.y + deltas[k][1];
-				
-				if(isIn(a,b) && !visited[a][b][node.cost] && !node.dessert.contains(map[a][b])) {
-					visited[a][b][node.cost] = true;
-					queue.offer(new Node(a,b,node.cost+1));
-				}
+			if(isIn(a,b) && !visited[a][b] && !dessert[map[a][b]]) {
+				visited[a][b] = true;
+				dessert[map[a][b]] = true;
+				dfs(a,b,initX,initY,i,cnt+1);
+				visited[a][b] = false;
+				dessert[map[a][b]] = false;
 			}
 		}
 	}
@@ -87,15 +86,4 @@ public class SWEA_02105 {
 		return a>=0 && a<N && b>=0 && b<N;
 	}
 	
-	static class Node{
-		int x, y, cost;
-		ArrayList<Integer> dessert = new ArrayList<>();
-
-		public Node(int x, int y, int cost) {
-			super();
-			this.x = x;
-			this.y = y;
-			this.cost = cost;
-		}
-	}
 }
