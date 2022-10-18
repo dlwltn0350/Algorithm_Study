@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 @author jisoo
 @since 2022. 10. 7.
 @see https://www.acmicpc.net/problem/1342 행운의 문자열
-@performance
+@performance 13380	368
 @difficulty S1
 @category #
 @note */
@@ -24,31 +24,44 @@ public class BOJ_01342 {
 	static StringBuilder sb = new StringBuilder();
 	static StringTokenizer tokens;
 	static ArrayList<Character> list = new ArrayList<>();
-	static String prev ="";
+	static Set<String> set = new HashSet<>();
 	static int cnt = 0;
-	
+	static int[] alph = new int[26];
 	
 	public static void main(String[] args) throws IOException {
 		String str = br.readLine();
 		
 		for(int i=0; i<str.length(); i++) {
 			list.add(str.charAt(i));
+			alph[str.charAt(i)-'a']++;
 		}
-		
-		Collections.sort(list); //정렬
 		
 		permutation(0, new boolean[list.size()], new char[str.length()], new StringBuilder());
 		
+		for(int i=0; i<alph.length; i++) {
+			if(alph[i]>1) {
+				cnt /=fact(alph[i]);
+			}
+		}
 		System.out.println(cnt);
+		//System.out.println(set.size());
+	}
+	
+	//중복제거를 위해 factorial
+	private static int fact(int n) {
+		if(n == 1) return 1;
+		return n*fact(n-1);
 	}
 	
 	static void permutation(int nth, boolean[] visited, char[] choosed, StringBuilder str) {
 		if(nth == choosed.length) {
-			if(!prev.equals(str.toString())) {
-				prev = str.toString();
-				//System.out.println(str.toString());
-				cnt++;
-			}
+//			for(int i=0; i<choosed.length; i++) {
+//				System.out.print(choosed[i]);
+//			}
+//			System.out.println();
+//			System.out.println(str.toString());
+			//set.add(str.toString());
+			cnt++;
 			return;
 		}
 		
