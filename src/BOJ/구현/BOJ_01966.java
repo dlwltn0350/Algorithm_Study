@@ -34,7 +34,6 @@ public class BOJ_01966 {
 				num = Integer.parseInt(tokens.nextToken());
 				queue.add(new int[] {i,num});
 				list.add(num);
-				max = Math.max(num, max);
 			}
 			
 			Collections.sort(list);//큰 중요도 순으로 정렬
@@ -43,18 +42,19 @@ public class BOJ_01966 {
 			//System.out.println(list);
 			
 			int cnt = 1;
+//			System.out.println("===");
 			while(!queue.isEmpty()) {
-				
-				if(queue.peek()[1] == max) {
+//				System.out.println(queue.peek()[0]+ " : "+queue.peek()[1]);
+				if(queue.peek()[1] == list.get(0)) {
 					if(queue.peek()[0] == M) break;
 					queue.poll();
 					list.remove(0);
-					max = list.get(0);	
+					cnt++;
 				}
 				else {
 					queue.offer(queue.poll());
 				}
-				cnt++;
+				
 			}
 			sb.append(cnt).append("\n");
 		}
