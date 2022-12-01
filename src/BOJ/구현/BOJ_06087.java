@@ -53,29 +53,39 @@ public class BOJ_06087 {
 	static void bfs() {
 		PriorityQueue<Node> queue = new PriorityQueue<>();
 		queue.offer(new Node(startX, startY,0,0));
-		boolean[][] visited = new boolean[H][W];
-		visited[startX][startY] = true;
+		int[][] visited = new int[H][W];
+		map[startX][startY] = '.';
+		for(int i=0; i<H; i++) {
+			for(int j=0; j<W; j++) {
+				visited[i][j] = Integer.MAX_VALUE;
+			}
+		}
+		visited[startX][startY] = 0;
 		
 		while(!queue.isEmpty()) {
 			Node node = queue.poll();
 			
-			if(node.x != startX && node.y !=startY && map[node.x][node.y] == 'C') {
+			//if(!(node.x == startX && node.y ==startY) && map[node.x][node.y] == 'C') {
+			if(map[node.x][node.y] == 'C') {
 				result = node.cnt;
-				break;
+				return;
 			}
 			
 			for(int k=0; k<deltas.length; k++) {
 				int a = node.x + deltas[k][0];
 				int b = node.y + deltas[k][1];
+				int cnt = node.cnt;
 				
-				if(isIn(a,b) && !visited[a][b] && map[a][b]!='*') {
+				if(isIn(a,b) && map[a][b]!='*') {
 					if(node.dir == k || (node.x == startX && node.y == startY)) {
-						queue.add(new Node(a,b,k,node.cnt));
 					}else {
-						queue.add(new Node(a,b,k,node.cnt+1));
-						System.out.println(node.x+ " : "+node.y + " : "+ (node.cnt+1));
+						cnt++;
 					}
-					visited[a][b] = true;
+					if(visited[a][b]>=cnt) {
+						queue.add(new Node(a,b,k,cnt));
+						visited[a][b] = cnt;
+//						System.out.println(a+" : "+b);
+					}
 				}
 			}
 		}
